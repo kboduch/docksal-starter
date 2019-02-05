@@ -1,0 +1,33 @@
+version: "2.1"
+
+services:
+  cli:
+    environment:
+      - PHP_IDE_CONFIG=serverName=${VIRTUAL_HOST}
+    ports:
+      # port:22 -- port needs to be unique per project on host
+      - "2220:22"
+
+  blackfire:
+    extends:
+      file: ${HOME}/.docksal/stacks/services.yml
+      service: blackfire
+
+  browser:
+    hostname: browser
+    image: selenium/standalone-chrome:3.141.59
+#    image: selenium/standalone-firefox:3.141.59
+#    image: selenium/standalone-chrome-debug
+    ports:
+      - "5900:5900"
+    volumes:
+      - /dev/shm:/dev/shm
+    dns:
+      - ${DOCKSAL_DNS1}
+      - ${DOCKSAL_DNS2}
+
+  # MailHog
+  mail:
+    extends:
+      file: ${HOME}/.docksal/stacks/services.yml
+      service: mail

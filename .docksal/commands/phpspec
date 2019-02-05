@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Runs phpspec check
+##
+## Usage: fin phpspec
+
+fin exec vendor/bin/phpspec run --no-coverage

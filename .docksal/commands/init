@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "### Creating .env.local ###"
+cp -n .env.local.dist .env.local
+
+fin exec bin/cache-clear.sh dev
+fin exec bin/recreate-db.sh dev
+
+fin exec bin/console --no-debug app:install

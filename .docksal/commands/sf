@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## symfony console alias (bin/console)
+##
+## Usage: fin sf [symfony command]
+
+fin exec bin/console "$@"

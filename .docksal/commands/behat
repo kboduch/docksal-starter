@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+## Runs behat [behat args]
+##
+## Usage: fin behat
+
+if [ ! -f .env.local ]; then
+    echo "'.env.local' file is missing. Run 'fin init' first."
+    exit 0;
+fi
+
+fin exec bin/cache-clear.sh test
+fin exec bin/recreate-db.sh test
+
+echo "Changing APP_ENV to test."
+sed -i '' 's/APP_ENV=dev/APP_ENV=test/g' .env.local
+sed -i '' 's/APP_DEBUG=1/APP_DEBUG=0/g' .env.local
+
+echo "Running ~@javascript && ~@todo suites"
+fin exec vendor/bin/behat --format=progress --tags="~@javascript && ~@todo" --config behat.yml.dist "$@"
+
+echo "Running @javascript && ~@todo suites"
+fin exec vendor/bin/behat --format=progress --tags="@javascript && ~@todo" --config behat.yml.dist "$@"
+
+echo "Changing APP_ENV to dev."
+sed -i '' 's/APP_ENV=test/APP_ENV=dev/g' .env.local
+sed -i '' 's/APP_DEBUG=0/APP_DEBUG=1/g' .env.local
+
